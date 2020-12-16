@@ -7,7 +7,7 @@ import uploadConfig from '../config/upload';
 import CreateUserSevice from '../services/CreateUserService';
 import UpdateUserAvatarService from '../services/UpdateUserAvatarService';
 
-import UsersRepository from '../repositoreis/UsersRepository';
+import UsersRepository from '../repositories/UsersRepository';
 
 import ensureAuthenticated from '../middlewares/ensureAuthenticated';
 

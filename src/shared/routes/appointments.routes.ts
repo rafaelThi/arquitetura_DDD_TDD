@@ -3,7 +3,7 @@
 import { Router } from 'express';
 import { parseISO } from 'date-fns';// startOfHour inicia a hora no Zero ----- parseISO converte de string para objetoDate
 import { getCustomRepository } from 'typeorm';
-import AppointmentsRepository from '../repositoreis/AppontimentsRepository';
+import AppointmentsRepository from '../repositories/AppontimentsRepository';
 import CreateAppointmentService from '../services/CreateAppointmentService';
 
 import ensureAuthenticated from '../middlewares/ensureAuthenticated';
