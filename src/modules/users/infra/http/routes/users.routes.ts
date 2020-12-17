@@ -2,12 +2,12 @@ import { Router } from 'express';
 import { getCustomRepository } from 'typeorm';
 
 import multer from 'multer';
-import uploadConfig from '../config/upload';
+import uploadConfig from '@config/upload';
 
-import CreateUserSevice from '../services/CreateUserService';
-import UpdateUserAvatarService from '../services/UpdateUserAvatarService';
+import CreateUserSevice from '@modules/users/services/CreateUserService';
+import UpdateUserAvatarService from '@modules/users/services/UpdateUserAvatarService';
 
-import UsersRepository from '../repositories/UsersRepository';
+import UsersRepository from '@modules/users/repositories/UsersRepository';
 
 import ensureAuthenticated from '../middlewares/ensureAuthenticated';
 

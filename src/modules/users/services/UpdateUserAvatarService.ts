@@ -3,9 +3,9 @@ import { getRepository } from 'typeorm';
 import path from 'path';
 import fs from 'fs';
 
-import upLoaderConfig from '../config/upload';
-import User from '../models/Users';
-import AppError from '../errors/AppError';
+import AppError from '@shared/errors/AppError';
+import upLoaderConfig from '@config/upload';
+import User from '@modules/users/infra/typeorm/entities/Users';
 
 interface RequestUpdate {
   user_id:string;
