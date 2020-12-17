@@ -4,20 +4,20 @@ import { getCustomRepository } from 'typeorm';
 
 import Appointment from '@modules/appointments/infra/typeorm/entities/Appointments';
 import AppError from '@shared/errors/AppError';
-import AppointmentsRepository from '../repositories/AppontimentsRepository';
+import AppointmentsRepository from '@modules/appointments/infra/typeorm/repositories/AppontimentsRepository';
 
 // os erros;
 // 1° recebimentos das informacoes
 // 2°Tratamento de erros/excessoes
 // 3° acesso ao repositorio
 
-interface RequestDTO {
+interface IRequestDTO {
   date: Date;
   provider_id: string;
 }
 
 class CreateAppointmentsService {
-  public async execute({ date, provider_id }:RequestDTO): Promise<Appointment> {
+  public async execute({ date, provider_id }:IRequestDTO): Promise<Appointment> {
     const appointmentsRepository = getCustomRepository(AppointmentsRepository);
 
     const appointmentDate = startOfHour(date);
@@ -28,11 +28,10 @@ class CreateAppointmentsService {
       throw new AppError('This appointment is already Booked');
     }
 
-    const appointment = appointmentsRepository.create({
+    const appointment = await appointmentsRepository.create({
       provider_id,
       date: appointmentDate,
     });
-    await appointmentsRepository.save(appointment);
     return appointment;
   }
 }
