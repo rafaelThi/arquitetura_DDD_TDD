@@ -7,6 +7,7 @@ import CreateUserSevice from '@modules/users/services/CreateUserService';
 import UpdateUserAvatarService from '@modules/users/services/UpdateUserAvatarService';
 
 import UseRepository from '@modules/users/infra/typeorm/repositories/UserRepository';
+import { container } from 'tsyringe';
 import ensureAuthenticated from '../middlewares/ensureAuthenticated';
 
 const usersRouter = Router();
@@ -23,9 +24,8 @@ usersRouter.get('/list', async (request, response) => {
 
 usersRouter.post('/', async (request, response) => {
   const { name, email, password } = request.body;
-  const usersRepository = new UseRepository();
 
-  const createUser = new CreateUserSevice(usersRepository);
+  const createUser = container.resolve(CreateUserSevice);
 
   const user = await createUser.execute({
     name,
@@ -39,9 +39,7 @@ usersRouter.post('/', async (request, response) => {
 });
 
 usersRouter.patch('/avatar', ensureAuthenticated, upload.single('avatar'), async (request, response) => {
-  const usersRepository = new UseRepository();
-
-  const updateUserAvatar = new UpdateUserAvatarService(usersRepository);
+  const updateUserAvatar = container.resolve(UpdateUserAvatarService);
 
   const user = await updateUserAvatar.execute({
     user_id: request.user.id,

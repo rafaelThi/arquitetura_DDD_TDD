@@ -1,6 +1,7 @@
 import path from 'path';
 import fs from 'fs';
 
+import { injectable, inject } from 'tsyringe';
 import AppError from '@shared/errors/AppError';
 import upLoaderConfig from '@config/upload';
 import User from '@modules/users/infra/typeorm/entities/Users';
@@ -11,11 +12,15 @@ interface IRequestUpdate {
   avatarFilename:string;
 }
 
+@injectable()
 class UpdateUserAvatarService {
   private usersRepository: IUsersRepository;
   // criando a variavel
 
-  constructor(userRepository: IUsersRepository) {
+  constructor(
+    @inject('UserRepository')
+      userRepository: IUsersRepository,
+  ) {
     // tipando o que esta recebendo
     this.usersRepository = userRepository;
     // atribuindo novo 'valor' par varaiavel <=

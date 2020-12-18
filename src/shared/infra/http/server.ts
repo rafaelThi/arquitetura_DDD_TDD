@@ -9,6 +9,7 @@ import upLoadConfig from '@config/upload';
 import '@shared/infra/typeorm/index';
 import routes from '@shared/infra/http/routes';
 import AppError from '@shared/errors/AppError';
+import '@shared/container/index';
 
 const app = express();
 //

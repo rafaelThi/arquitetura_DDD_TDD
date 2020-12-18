@@ -1,5 +1,6 @@
 import { compare } from 'bcryptjs';
 import { sign } from 'jsonwebtoken';
+import { inject, injectable } from 'tsyringe';
 
 import AppError from '@shared/errors/AppError';
 
@@ -18,11 +19,15 @@ interface IResponseUser {
    token: string
   }
 
+@injectable()
 class AutenticanteCreateSession {
   private usersRepository: IUsersRepository;
   // criando a variavel
 
-  constructor(userRepository: IUsersRepository) {
+  constructor(
+    @inject('UserRepository')
+      userRepository: IUsersRepository,
+  ) {
     // tipando o que esta recebendo
     this.usersRepository = userRepository;
     // atribuindo novo 'valor' par varaiavel <=

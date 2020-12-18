@@ -1,9 +1,9 @@
 import { Router } from 'express';
 import { parseISO } from 'date-fns';// startOfHour inicia a hora no Zero ----- parseISO converte de string para objetoDate
-import AppointmentsRepository from '@modules/appointments/infra/typeorm/repositories/AppontimentsRepository';
 import CreateAppointmentService from '@modules/appointments/services/CreateAppointmentService';
 
 import ensureAuthenticated from '@modules/users/infra/http/middlewares/ensureAuthenticated';
+import { container } from 'tsyringe';
 
 const appointmentsRouter = Router();
 
@@ -21,8 +21,7 @@ appointmentsRouter.post('/', async (request, response) => {
 
   const parsedDate = parseISO(date);// alterando a hora
 
-  const appointmentsRepository = new AppointmentsRepository();
-  const createAppointement = new CreateAppointmentService(appointmentsRepository);
+  const createAppointement = container.resolve(CreateAppointmentService);
 
   const appointment = await createAppointement.execute({ date: parsedDate, provider_id });
 

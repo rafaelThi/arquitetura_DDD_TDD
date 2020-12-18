@@ -1,6 +1,7 @@
 import { hash } from 'bcryptjs';
 import User from '@modules/users/infra/typeorm/entities/Users';
 import AppError from '@shared/errors/AppError';
+import { inject, injectable } from 'tsyringe';
 import IUsersRepository from '../repositories/IUserRepository';
 
 interface IRequest {
@@ -8,12 +9,15 @@ interface IRequest {
   email:string;
   password:string;
 }
-
+@injectable()
 class CreateUserService {
   private usersRepository: IUsersRepository;
   // criando a variavel
 
-  constructor(userRepository: IUsersRepository) {
+  constructor(
+    @inject('UserRepository')
+      userRepository: IUsersRepository,
+  ) {
     // tipando o que esta recebendo
     this.usersRepository = userRepository;
     // atribuindo novo 'valor' par varaiavel <=
