@@ -1,22 +1,28 @@
-/* eslint-disable camelcase */
-import { getRepository } from 'typeorm';
 import path from 'path';
 import fs from 'fs';
 
 import AppError from '@shared/errors/AppError';
 import upLoaderConfig from '@config/upload';
 import User from '@modules/users/infra/typeorm/entities/Users';
+import IUsersRepository from '../repositories/IUserRepository';
 
-interface RequestUpdate {
+interface IRequestUpdate {
   user_id:string;
   avatarFilename:string;
 }
 
 class UpdateUserAvatarService {
-  public async execute({ user_id, avatarFilename }: RequestUpdate): Promise<User> {
-    const userRepository = getRepository(User);
+  private usersRepository: IUsersRepository;
+  // criando a variavel
 
-    const user = await userRepository.findOne(user_id);
+  constructor(userRepository: IUsersRepository) {
+    // tipando o que esta recebendo
+    this.usersRepository = userRepository;
+    // atribuindo novo 'valor' par varaiavel <=
+  }
+
+  public async execute({ user_id, avatarFilename }: IRequestUpdate): Promise<User> {
+    const user = await this.usersRepository.findById(user_id);
     if (!user) {
       throw new AppError('Deve estar Logado para mudar o Avatar.');
     }
@@ -30,7 +36,7 @@ class UpdateUserAvatarService {
       }
     }
     user.avatar = avatarFilename;
-    await userRepository.save(user);
+    await this.usersRepository.save(user);
 
     return user;
   }

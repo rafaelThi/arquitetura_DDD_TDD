@@ -1,5 +1,3 @@
-import { getRepository } from 'typeorm';
-
 import { compare } from 'bcryptjs';
 import { sign } from 'jsonwebtoken';
 
@@ -8,22 +6,31 @@ import AppError from '@shared/errors/AppError';
 import User from '@modules/users/infra/typeorm/entities/Users';
 
 import auth from '@config/auth';
+import IUsersRepository from '../repositories/IUserRepository';
 
-interface RequestDTO {
+interface IRequestDTO {
   email: string,
   password: string
 }
 
-interface ResponseUser {
+interface IResponseUser {
   user:User;
    token: string
   }
 
 class AutenticanteCreateSession {
-  public async execute({ email, password }:RequestDTO): Promise<ResponseUser> {
-    const userRepository = getRepository(User);
+  private usersRepository: IUsersRepository;
+  // criando a variavel
+
+  constructor(userRepository: IUsersRepository) {
+    // tipando o que esta recebendo
+    this.usersRepository = userRepository;
+    // atribuindo novo 'valor' par varaiavel <=
+  }
+
+  public async execute({ email, password }:IRequestDTO): Promise<IResponseUser> {
     // chamando usuario para autenticar
-    const user = await userRepository.findOne({ where: { email } });
+    const user = await this.usersRepository.findByEmail(email);
     // verificar o email do usuario
     if (!user) {
       throw new AppError('Incorrect dates', 401);

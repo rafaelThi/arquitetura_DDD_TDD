@@ -1,34 +1,37 @@
-import { getRepository } from 'typeorm';
 import { hash } from 'bcryptjs';
 import User from '@modules/users/infra/typeorm/entities/Users';
 import AppError from '@shared/errors/AppError';
+import IUsersRepository from '../repositories/IUserRepository';
 
-interface Request {
+interface IRequest {
   name: string;
   email:string;
   password:string;
 }
 
 class CreateUserService {
-  public async execute({ name, email, password }:Request): Promise<User> {
-    const usersReposotory = getRepository(User);
+  private usersRepository: IUsersRepository;
+  // criando a variavel
 
-    const checkUserExists = await usersReposotory.findOne({
-      where: { email },
-    });
+  constructor(userRepository: IUsersRepository) {
+    // tipando o que esta recebendo
+    this.usersRepository = userRepository;
+    // atribuindo novo 'valor' par varaiavel <=
+  }
+
+  public async execute({ name, email, password }:IRequest): Promise<User> {
+    const checkUserExists = await this.usersRepository.findByEmail(email);
 
     if (checkUserExists) {
       throw new AppError('Email já cadastrado', 401);
     }
     const hashPass = await hash(password, 8);
 
-    const user = usersReposotory.create({
+    const user = await this.usersRepository.create({
       name,
       email,
       password: hashPass,
     });
-
-    await usersReposotory.save(user);
     return user;
   }
 }

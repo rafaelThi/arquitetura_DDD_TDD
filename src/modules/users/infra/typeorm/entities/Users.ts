@@ -16,6 +16,7 @@ class User {
 
   @Column()
   password?: string;
+  // a '?' para parar um erro ao deletar o password no retorno
 
   @Column()
   avatar: string;
