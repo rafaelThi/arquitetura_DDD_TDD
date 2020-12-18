@@ -4,17 +4,20 @@ import CreateAppointmentService from '@modules/appointments/services/CreateAppoi
 
 import ensureAuthenticated from '@modules/users/infra/http/middlewares/ensureAuthenticated';
 import { container } from 'tsyringe';
+import AppointmentsRepository from '../../typeorm/repositories/AppontimentsRepository';
 
 const appointmentsRouter = Router();
 
 appointmentsRouter.use(ensureAuthenticated);
 
-// appointmentsRouter.get('/list', async (request, response) => {
-//   console.log(request.user);
-//   const appointments = await appointmentsRepository.find();
-// // comentar temporariamente
-//   return response.json(appointments);
-// });
+appointmentsRouter.get('/list', async (request, response) => {
+  console.log(request.user);
+  const appointmentsRepository = new AppointmentsRepository();
+
+  const appointments = await appointmentsRepository.getAll();
+  // comentar temporariamente
+  return response.json(appointments);
+});
 
 appointmentsRouter.post('/', async (request, response) => {
   const { provider_id, date } = request.body;
