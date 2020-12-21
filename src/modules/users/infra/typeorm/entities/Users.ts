@@ -15,7 +15,7 @@ class User {
   email: string;
 
   @Column()
-  password?: string;
+  password: string;
   // a '?' para parar um erro ao deletar o password no retorno
 
   @Column()
