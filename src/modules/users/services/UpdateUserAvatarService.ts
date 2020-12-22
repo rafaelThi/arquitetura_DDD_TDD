@@ -1,9 +1,5 @@
-import path from 'path';
-import fs from 'fs';
-
 import { injectable, inject } from 'tsyringe';
 import AppError from '@shared/errors/AppError';
-import upLoaderConfig from '@config/upload';
 import User from '@modules/users/infra/typeorm/entities/Users';
 import IStoregeProvaider from '@shared/container/providers/StoregeProvider/models/IStoregeProvaider';
 import IUsersRepository from '../repositories/IUserRepository';
