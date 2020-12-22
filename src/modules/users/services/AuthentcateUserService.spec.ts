@@ -23,11 +23,28 @@ describe('AuthentcateUser', () => {
 
     expect(response).toHaveProperty('token');
     expect(response.user).toEqual(user);
+  });
+
+  it('should not be able to Authenticate with email not exists', async () => {
+    const fakeAuthentcateUserRepo = new FakeUserRepository();
+    const fakeHashProvider = new FakeHashProvider();
+
+    const createAuthentcateUser = new AuthentcateUserService(fakeAuthentcateUserRepo, fakeHashProvider);
 
     await expect(createAuthentcateUser.execute({
       email: 'test1010@test.com',
       password: '123456',
     })).rejects.toBeInstanceOf(AppError);
+  });
+  it('should be able to Authenticate', async () => {
+    const fakeAuthentcateUserRepo = new FakeUserRepository();
+    const fakeHashProvider = new FakeHashProvider();
+
+    const createUser = new CreateUserService(fakeAuthentcateUserRepo, fakeHashProvider);
+
+    const createAuthentcateUser = new AuthentcateUserService(fakeAuthentcateUserRepo, fakeHashProvider);
+
+    await createUser.execute({ name: 'Teste', email: 'test@test.com', password: '123456' });
 
     await expect(createAuthentcateUser.execute({
       email: 'test@test.com',
