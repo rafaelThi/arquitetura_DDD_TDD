@@ -1,7 +1,7 @@
-import { hash } from 'bcryptjs';
 import User from '@modules/users/infra/typeorm/entities/Users';
 import AppError from '@shared/errors/AppError';
 import { inject, injectable } from 'tsyringe';
+import IHashProvider from '@modules/users/provider/HashProvider/models/IHashProvider';
 import IUsersRepository from '../repositories/IUserRepository';
 
 interface IRequest {
@@ -17,6 +17,9 @@ class CreateUserService {
   constructor(
     @inject('UserRepository')
       userRepository: IUsersRepository,
+
+      @inject('BCryptHashProvider')
+      private hashProvider: IHashProvider,
   ) {
     // tipando o que esta recebendo
     this.usersRepository = userRepository;
@@ -29,7 +32,7 @@ class CreateUserService {
     if (checkUserExists) {
       throw new AppError('Email já cadastrado', 401);
     }
-    const hashPass = await hash(password, 8);
+    const hashPass = await this.hashProvider.generateHash(password);
 
     const user = await this.usersRepository.create({
       name,

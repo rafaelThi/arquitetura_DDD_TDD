@@ -1,4 +1,3 @@
-import { compare } from 'bcryptjs';
 import { sign } from 'jsonwebtoken';
 import { inject, injectable } from 'tsyringe';
 
@@ -8,6 +7,7 @@ import User from '@modules/users/infra/typeorm/entities/Users';
 
 import auth from '@config/auth';
 import IUsersRepository from '../repositories/IUserRepository';
+import IHashProvider from '../provider/HashProvider/models/IHashProvider';
 
 interface IRequestDTO {
   email: string,
@@ -27,6 +27,9 @@ class AutenticanteCreateSession {
   constructor(
     @inject('UserRepository')
       userRepository: IUsersRepository,
+
+      @inject('BCryptHashProvider')
+      private hashProvider: IHashProvider,
   ) {
     // tipando o que esta recebendo
     this.usersRepository = userRepository;
@@ -40,7 +43,7 @@ class AutenticanteCreateSession {
     if (!user) {
       throw new AppError('Incorrect dates', 401);
     }
-    const passwordMatch = await compare(password, user.password);
+    const passwordMatch = await this.hashProvider.compareHash(password, user.password);
     // verificar a senha do usuario
 
     if (!passwordMatch) {
