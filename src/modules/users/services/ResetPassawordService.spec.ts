@@ -1,19 +1,22 @@
-import FakeUserRepository from '@modules/users/repositories/fakes/FakeUserRepository';
+import FakeUsersRepository from '@modules/users/repositories/fakes/FakeUserRepository';
 
 import ResetPassword from './ResetPasswordService';
 import FakeUserTokenRepository from '../repositories/fakes/FakeUserTokenRepository';
+import FakeHashProvider from '../provider/HashProvider/fakes/FakeHashProvider';
 
-describe('Send123 Forgot Password Email', () => {
+describe('Reset Password Service', () => {
   it('should be able to reset password', async () => {
-    const fakeUserRepo = new FakeUserRepository();
+    const fakeUsersRepo = new FakeUsersRepository();
     const fakeUserTokenRepo = new FakeUserTokenRepository();
+    const fakeHashProvider = new FakeHashProvider();
 
     const resetPassword = new ResetPassword(
       fakeUserTokenRepo,
-      fakeUserRepo,
+      fakeHashProvider,
+      fakeUsersRepo,
     );
 
-    const user = await fakeUserRepo.create({
+    const user = await fakeUsersRepo.create({
       name: 'Test',
       email: 'test@test.com',
       password: '123456',
@@ -21,13 +24,16 @@ describe('Send123 Forgot Password Email', () => {
 
     const { token } = await fakeUserTokenRepo.generate(user.id);
 
+    const gererateHash = jest.spyOn(fakeHashProvider, 'generateHash');
+
     await resetPassword.execute({
       token,
       password: 'abcdef',
 
     });
-    const confirmUser = await fakeUserRepo.findById(user.id);
+    const confirmUser = await fakeUsersRepo.findById(user.id);
 
+    expect(gererateHash).toBeCalledWith('abcdef');
     expect(confirmUser?.password).toBe('abcdef');
   });
 });
