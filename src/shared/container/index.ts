@@ -11,7 +11,12 @@ import UserRepository from '@modules/users/infra/typeorm/repositories/UserReposi
 import '@modules/users/provider/index';
 import '@shared/container/providers/index';
 
+// import IUserTokenRepository from '@modules/users/repositories/IUserTokenRepository';
+// import UserTokenRepository from '@modules/users';
+
 container.registerSingleton<IAppointmentsRepository>('AppointmentsRepository', AppointmentsRepository);
 // registerSingleton pq ele instancia essa classe uma unica vez e depois todas as requisicoes usam essa instancias
 
 container.registerSingleton<IUserRepository>('UserRepository', UserRepository);
+
+// container.registerSingleton<IUserTokenRepository>('IUserTokenRepository', UserTokenRepository);

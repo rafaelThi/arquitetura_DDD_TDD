@@ -3,7 +3,7 @@ import IUsersRepository from '@modules/users/repositories/IUserRepository';
 import User from '@modules/users/infra/typeorm/entities/Users';
 import { uuid } from 'uuidv4';
 
-class UseRepository implements IUsersRepository {
+class FakeUserRepository implements IUsersRepository {
   private users : User[] = []
 
   public async findByEmail(email: string): Promise<User | undefined> {
@@ -36,4 +36,4 @@ class UseRepository implements IUsersRepository {
   }
 }
 
-export default UseRepository;
+export default FakeUserRepository;
