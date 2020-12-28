@@ -42,7 +42,7 @@ describe('Send Forgot Password Email', () => {
     })).rejects.toBeInstanceOf(AppError);
   });
 
-  it('should generate a forgotpassword token', async () => {
+  it('should generate a forgot password token', async () => {
     const fakeUserRepo = new FakeUserRepository();
     const fakeMailProvider = new FakeMailProvider();
     const fakeUserTokenRepo = new FakeUserTokenRepository();
