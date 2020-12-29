@@ -37,7 +37,7 @@ public async save(user: User): Promise <User> {
   return this.ormRepository.save(user);
 }
 
-public async getAll() {
+public async getAll():Promise<User[]> {
   const allUsers = this.ormRepository.find();
 
   return allUsers;
