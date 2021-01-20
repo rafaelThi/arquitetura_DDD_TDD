@@ -11,8 +11,8 @@ class ForgotPasswordContoller {
       email,
     });
 
-    return response.send(204).json();
-    // 204, uma resposta ue deu sucesso, porém sem corpo
+    return response.sendStatus(204);
+    // 204, uma resposta que deve sucesso, porém sem corpo
   }
 }
 

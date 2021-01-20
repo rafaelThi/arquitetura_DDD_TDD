@@ -3,7 +3,7 @@ import { verify } from 'jsonwebtoken';
 import auth from '@config/auth';
 import AppError from '@shared/errors/AppError';
 
-interface TokenPayLoad {
+interface ITokenPayLoad {
   iat: number;
   exp: number;
   sub: string;
@@ -22,7 +22,7 @@ export default function ensureAuthenticated(request:Request,
   try {
     const deCoded = verify(token, auth.jwt.secret);
 
-    const { sub } = deCoded as TokenPayLoad;
+    const { sub } = deCoded as ITokenPayLoad;
     // forçando o tipo de uma variavel, colocando a interface nela para poder ter acesso aos dados
 
     request.user = {
