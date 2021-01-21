@@ -4,15 +4,13 @@ import ResetPasswordService from '@modules/users/services/ResetPasswordService';
 
 class ResetPasswordContoller {
   public async create(request: Request, response: Response): Promise<Response> {
-    const { token, password } = request.body;
+    const { password, token } = request.body;
+    console.log(token);
     const resetPassword = container.resolve(ResetPasswordService);
 
-    await resetPassword.execute({
-      token,
-      password,
-    });
+    await resetPassword.execute({ password, token });
 
-    return response.send(204).json();
+    return response.status(204);
     // 204, uma resposta ue deu sucesso, porém sem corpo
   }
 }

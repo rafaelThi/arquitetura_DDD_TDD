@@ -6,38 +6,32 @@ import IUserTokenRepository from '../repositories/IUserTokenRepository';
 import IHashProvider from '../provider/HashProvider/models/IHashProvider';
 
 interface IRequest {
-  token:string;
   password:string;
+  token:string;
 }
 @injectable()
 class ResetPasswordService {
-  private usersRepository: IUsersRepository;
-  // criando a variavel
-
   constructor(
-    @inject('UserTokenRepository')//
-    private userTokenRepository: IUserTokenRepository,
+    @inject('UserRepository')
+    private userRepository: IUsersRepository,
 
     @inject('HashProvider')//
     private hashProvider: IHashProvider,
 
-    @inject('UserRepository')
-    userRepository: IUsersRepository,
+    @inject('UserTokenRepository')//
+    private userTokenRepository: IUserTokenRepository,
 
-  ) {
-    // tipando o que esta recebendo
-    this.usersRepository = userRepository;
-    // atribuindo novo 'valor' par varaiavel <=
-  }
+  ) {}
 
   public async execute({ token, password }:IRequest): Promise<void> {
+    console.log(password, token);
     const userToken = await this.userTokenRepository.findByToken(token);
 
     if (!userToken) {
       throw new AppError('User token does not exists');
     }
 
-    const user = await this.usersRepository.findById(userToken.user_id);
+    const user = await this.userRepository.findById(userToken.user_id);
 
     if (!user) {
       throw new AppError('User does not exists');
@@ -53,7 +47,7 @@ class ResetPasswordService {
 
     user.password = await this.hashProvider.generateHash(password);
 
-    await this.usersRepository.save(user);
+    await this.userRepository.save(user);
   }
 }
 
